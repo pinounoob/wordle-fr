@@ -30,6 +30,47 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script src="discord-init.js"></script>
+
+<!-- SDK Discord -->
+<script src="https://unpkg.com/@discord/embedded-app-sdk@1.2.0"></script>
+
+<!-- Logique Discord et Webhook isolée -->
+<script>
+    // Initialisation
+    const discordSdk = new DiscordSDK.DiscordSDK({
+        client_id: 1509261843536019477; 
+    });
+
+    async function setupDiscord() {
+        try {
+            await discordSdk.ready();
+            console.log("Connecté à Discord !");
+        } catch (error) {
+            console.error("Non ouvert dans Discord :", error);
+        }
+    }
+    setupDiscord();
+
+    // Fonction Webhook prête à être appelée par le jeu
+    async function envoyerScoreDiscord(scoreTexte) {
+        const webhookUrl = "https://discord.com/api/webhooks/1509600182965243904/DoJZYzUl5ulGWSYIZKjOt7LId7aQStHrmdZILOihTWB_nZiyJylk0_APpC2M62D8CWej";
+        
+        const payload = {
+            username: "Le Mot FR",
+            content: scoreTexte
+        };
+
+        try {
+            await fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            console.log("Score envoyé !");
+        } catch (e) {
+            console.error("Erreur Webhook:", e);
+        }
+    }
+</script>
   </body>
 </html>
